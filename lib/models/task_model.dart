@@ -1,16 +1,26 @@
+import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
+part 'task_model.g.dart';
 
-class Task {
+@HiveType(typeId: 1)
+class Task extends HiveObject{
+  @HiveField(0)
   final String id;
-  late final String name;
+
+  @HiveField(1)
+  String name;
+
+  @HiveField(2)
   final DateTime createdAt;
-  late final bool isCompleted;
+
+  @HiveField(3)
+  bool isCompleted;
 
   Task(
       {required this.id,
-      required this.name,
-      required this.createdAt,
-      required this.isCompleted});
+        required this.name,
+        required this.createdAt,
+        required this.isCompleted});
 
   factory Task.create({required String name, required DateTime createdAt}) {
     return Task(
