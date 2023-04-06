@@ -2,8 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import '../models/task_model.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late List<Task> _allTasks;
+
+  @override
+  void initState() {
+    _allTasks = <Task>[];
+    _allTasks.add(Task.create(name: 'Deneme', createdAt: DateTime.now()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +46,36 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
+      body: _allTasks.isNotEmpty ? ListView.builder(
+        itemBuilder: (context, index) {
+          var _listeElemani = _allTasks[index];
+          return Dismissible(
+            background: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.delete,
+                  color: Colors.grey,),
+                SizedBox(
+                  width: 8,
+                ),
+                Text('Bu görev silindi')
+              ],
+            ),
+            key: Key(_listeElemani.id),
+            onDismissed: (direction) {
+              _allTasks.removeAt(index);
+              setState(() {
+
+              });
+            },
+            child: ListTile(
+              title: Text(_listeElemani.name + " " + _listeElemani.id),
+              subtitle: Text(_listeElemani.createdAt.toString()),
+            ),
+          );
+        },
+        itemCount: _allTasks.length,
+      ),
     );
   }
 }
@@ -43,8 +86,14 @@ void _showAddTaskBottomSheet(BuildContext context) {
     builder: (context) {
       return Container(
         padding:
-        EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        width: MediaQuery.of(context).size.width,
+        EdgeInsets.only(bottom: MediaQuery
+            .of(context)
+            .viewInsets
+            .bottom),
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         child: ListTile(
           title: TextField(
             style: TextStyle(fontSize: 20),
@@ -56,9 +105,14 @@ void _showAddTaskBottomSheet(BuildContext context) {
               Navigator.of(context).pop();
               if (value.length > 3) {
                 DatePicker.showTimePicker(context, showSecondsColumn: false,
-                  onConfirm: (time) {
-                    var yeniEklenecekGorev = Task.create(name: value, createdAt: time);
-                });
+                    onConfirm: (time) {
+                      var yeniEklenecekGorev =
+                      Task.create(name: value, createdAt: time);
+                      _allTasks.add(yeniEklenecekGorev);
+                      setState(() {
+
+                      });
+                    });
               }
             },
           ),
