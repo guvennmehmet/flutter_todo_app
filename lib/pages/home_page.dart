@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import '../models/task_model.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -8,9 +10,14 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          'Bugün Neler Yapacaksın?',
-          style: TextStyle(color: Colors.black),
+        title: GestureDetector(
+          onTap: () {
+            _showAddTaskBottomSheet(context);
+          },
+          child: Text(
+            'Bugün Neler Yapacaksın?',
+            style: TextStyle(color: Colors.black),
+          ),
         ),
         centerTitle: false,
         actions: [
@@ -38,13 +45,22 @@ void _showAddTaskBottomSheet(BuildContext context) {
         padding:
         EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         width: MediaQuery.of(context).size.width,
-        child: const ListTile(
+        child: ListTile(
           title: TextField(
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 20),
             decoration: InputDecoration(
               hintText: 'Görev Nedir?',
               border: InputBorder.none,
             ),
+            onSubmitted: (value) {
+              Navigator.of(context).pop();
+              if (value.length > 3) {
+                DatePicker.showTimePicker(context, showSecondsColumn: false,
+                  onConfirm: (time) {
+                    var yeniEklenecekGorev = Task.create(name: value, createdAt: time);
+                });
+              }
+            },
           ),
         ),
       );
