@@ -1,6 +1,9 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import '../models/task_model.dart';
+import '../widgets/task_list_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -64,18 +67,15 @@ class _HomePageState extends State<HomePage> {
             key: Key(_listeElemani.id),
             onDismissed: (direction) {
               _allTasks.removeAt(index);
-              setState(() {
-
-              });
+              setState(() {});
             },
-            child: ListTile(
-              title: Text(_listeElemani.name + " " + _listeElemani.id),
-              subtitle: Text(_listeElemani.createdAt.toString()),
-            ),
+              child: TaskItem(task: _listeElemani),
           );
         },
         itemCount: _allTasks.length,
-      ),
+      ) : Center(
+        child: Text('Hadi görev ekle'),
+      )
     );
   }
 }
@@ -96,6 +96,7 @@ void _showAddTaskBottomSheet(BuildContext context) {
             .width,
         child: ListTile(
           title: TextField(
+            autofocus: true,
             style: TextStyle(fontSize: 20),
             decoration: InputDecoration(
               hintText: 'Görev Nedir?',
