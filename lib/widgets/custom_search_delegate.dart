@@ -1,3 +1,4 @@
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/data/local_storage.dart';
 import 'package:flutter_todo_app/main.dart';
@@ -53,6 +54,7 @@ class CustomSearchDelegate extends SearchDelegate {
               const SizedBox(
                 width: 8,
               ),
+              Text('remove_task').tr()
             ],
           ),
           key: Key(_oankiListeElemani.id),
@@ -65,7 +67,7 @@ class CustomSearchDelegate extends SearchDelegate {
         );
       },
       itemCount: filteredList.length,
-    ):  Center(child: Text('search_not_found'),);
+    ):  Center(child: Text('search_not_found').tr(),);
   }
 
   @override

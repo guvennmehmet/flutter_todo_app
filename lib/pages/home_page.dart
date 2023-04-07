@@ -1,11 +1,12 @@
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_todo_app/data/local_storage.dart';
+import 'package:flutter_todo_app/helper/translation_helper.dart';
 import 'package:flutter_todo_app/main.dart';
 import 'package:flutter_todo_app/models/task_model.dart';
+import 'package:flutter_todo_app/widgets/custom_search_Delegate.dart';
 import 'package:flutter_todo_app/widgets/task_list_item.dart';
-
-import '../widgets/custom_search_delegate.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           child: const Text(
             'title',
             style: TextStyle(color: Colors.black),
-          ),
+          ).tr(),
         ),
         centerTitle: false,
         actions: [
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
       body: _allTasks.isNotEmpty
           ? ListView.builder(
         itemBuilder: (context, index) {
-          var _oankiListeElemani = _allTasks[index];
+          var _listeElemani = _allTasks[index];
           return Dismissible(
             background: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -74,22 +75,22 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   width: 8,
                 ),
-                Text('remove_task')
+                Text('remove_task').tr()
               ],
             ),
-            key: Key(_oankiListeElemani.id),
+            key: Key(_listeElemani.id),
             onDismissed: (direction) {
               _allTasks.removeAt(index);
-              _localStorage.deleteTask(task: _oankiListeElemani);
+              _localStorage.deleteTask(task: _listeElemani);
               setState(() {});
             },
-            child: TaskItem(task: _oankiListeElemani),
+            child: TaskItem(task: _listeElemani),
           );
         },
         itemCount: _allTasks.length,
       )
           : Center(
-        child: Text('empty_task_list'),
+        child: Text('empty_task_list').tr(),
       ),
     );
   }
@@ -107,13 +108,14 @@ class _HomePageState extends State<HomePage> {
               autofocus: true,
               style: const TextStyle(fontSize: 20),
               decoration: InputDecoration(
-                hintText: 'add_task',
+                hintText: 'add_task'.tr(),
                 border: InputBorder.none,
               ),
               onSubmitted: (value) {
                 Navigator.of(context).pop();
                 if (value.length > 3) {
                   DatePicker.showTimePicker(context,
+                      locale: TranslationHelper.getDeviceLanguage(context),
                       showSecondsColumn: false, onConfirm: (time) async {
                         var yeniEklenecekGorev =
                         Task.create(name: value, createdAt: time);
