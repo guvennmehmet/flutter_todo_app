@@ -5,6 +5,8 @@ import 'package:flutter_todo_app/main.dart';
 import 'package:flutter_todo_app/models/task_model.dart';
 import 'package:flutter_todo_app/widgets/task_list_item.dart';
 
+import '../widgets/custom_search_delegate.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -43,6 +45,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () {
+              _showSearchPage();
             },
             icon: const Icon(
               Icons.search,
@@ -71,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   width: 8,
                 ),
-                Text('remove_task'),
+                Text('remove_task')
               ],
             ),
             key: Key(_oankiListeElemani.id),
@@ -104,6 +107,7 @@ class _HomePageState extends State<HomePage> {
               autofocus: true,
               style: const TextStyle(fontSize: 20),
               decoration: InputDecoration(
+                hintText: 'add_task',
                 border: InputBorder.none,
               ),
               onSubmitted: (value) {
@@ -132,4 +136,9 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  void _showSearchPage() async {
+    await showSearch(
+        context: context, delegate: CustomSearchDelegate(allTasks: _allTasks));
+    _getAllTaskFromDb();
+  }
 }
